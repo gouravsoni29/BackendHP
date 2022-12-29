@@ -24,7 +24,7 @@ import com.hotel.model.User;
 import com.hotel.services.impl.UserDetailsServiceImpl;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class AuthenticateController {
 
 

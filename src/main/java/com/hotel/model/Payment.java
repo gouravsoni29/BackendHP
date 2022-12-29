@@ -15,22 +15,26 @@ public class Payment {
     @Column(name = "payment_id")
     private Long paymentId;
 	private String paymentDate;
-	private String paymentTime;
+	private String username;
 	
 	
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public Payment() {
 		super();
 	}
-	public Payment(Long paymentId, String paymentDate, String paymentTime) {
+	
+	
+	public Payment(Long paymentId, String paymentDate, String username) {
 		super();
 		this.paymentId = paymentId;
 		this.paymentDate = paymentDate;
-		this.paymentTime = paymentTime;
-	}
-	public Payment(String paymentDate, String paymentTime) {
-		super();
-		this.paymentDate = paymentDate;
-		this.paymentTime = paymentTime;
+		this.username = username;
 	}
 	public Long getPaymentId() {
 		return paymentId;
@@ -44,12 +48,6 @@ public class Payment {
 	public void setPaymentDate(String paymentDate) {
 		this.paymentDate = paymentDate;
 	}
-	public String getPaymentTime() {
-		return paymentTime;
-	}
-	public void setPaymentTime(String paymentTime) {
-		this.paymentTime = paymentTime;
-	}
-	
+
 
 }

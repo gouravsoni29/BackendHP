@@ -5,6 +5,22 @@ public class BookingData {
 	private String firstName;
 	private String lastName;
 	private String gender;
+	private String username;
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public long getPrice() {
+		return price;
+	}
+	public void setPrice(long price) {
+		this.price = price;
+	}
+
+	private long price;
 	private Integer age;
 	private Long userId;
 	private String checkinDate;

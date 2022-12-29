@@ -12,28 +12,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hotel.dataclass.BookingData;
 import com.hotel.exception.UserFoundException;
-import com.hotel.model.Book;
 import com.hotel.model.Contact;
 import com.hotel.model.Role;
 import com.hotel.model.User;
 import com.hotel.model.UserRole;
 import com.hotel.repo.BookingRepo;
 import com.hotel.repo.ContactRepo;
-import com.hotel.repo.PaymentRepo;
+import com.hotel.repo.UserRepository;
 import com.hotel.services.UserService;
 import com.hotel.services.impl.UserDetailsServiceImpl;
 import com.hotel.services.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
+@CrossOrigin(origins="http://localhost:4200")
 public class UserController {
 
     @Autowired
@@ -51,7 +49,8 @@ public class UserController {
     private ContactRepo contactRepo;
     
     @Autowired
-    private PaymentRepo paymentRepo;
+    private UserRepository userRepository;
+    
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -82,11 +81,18 @@ public class UserController {
         return this.userService.createUser(user, roles);
 
     }
+    
+    @GetMapping("/all")
+   public List<User> getAll(){
+    	return userRepository.findAll();
+    }
 
     @GetMapping("/{username}")
     public User getUser(@PathVariable("username") String username) {
         return this.userService.getUser(username);
     }
+    
+   
 
     //delete the user by id
     @DeleteMapping("/{userId}")
@@ -106,36 +112,40 @@ public class UserController {
 	@PostMapping("/contactus")
 	public Contact saveStudent(@RequestBody Contact contact) throws Exception
 	{
-		Contact obj=userServiceImpl.saveContactus(contact);
+		Contact obj=contactRepo.save(contact);
 		
 		return obj;
 	}
 	
-	@PostMapping("/save_booking")
-	public Book saveBooking(@RequestBody BookingData booking) throws Exception
-	{
-		Book obj=userServiceImpl.saveBook(booking);
+	@GetMapping("/allfeed")
+	public List<Contact> getAllFeed(){
+		return contactRepo.findAll();
+	}
+	@PutMapping("/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable Long id,@RequestBody User user){
+		@SuppressWarnings("deprecation")
+		User getuser=userRepository.getById(id);	
+		getuser.setEmail(user.getEmail());
+		getuser.setPhone(user.getPhone());
+		getuser.setFirstName(user.getFirstName());
+		getuser.setLastName(user.getLastName());
 		
-		return obj;
+		User updateuser=userRepository.save(getuser);
+		return ResponseEntity.ok().body(updateuser);
 	}
 	
-	@GetMapping("/get_history")
-	public List<Book> getBookingHistory(@RequestParam Long user_id) 
-	{
-			//System.out.println("s="+source+" d="+desOtination+" t"+type);
-			List<Book> obj=userServiceImpl.fetchBookingHistory(user_id);
-			//System.out.println("list="+obj);
-			return obj;
-	}
+
+//	
+//	@GetMapping("/get_history")
+//	public List<Book> getBookingHistory(@RequestParam Long user_id) 
+//	{
+//			//System.out.println("s="+source+" d="+desOtination+" t"+type);
+//			List<Book> obj=userServiceImpl.fetchBookingHistory(user_id);
+//			//System.out.println("list="+obj);
+//			return obj;
+//	}
+//	
 	
-	@GetMapping("/cancel_booking")
-	public List<Book> cancelBooking(@RequestParam Long booking_id) 
-	{
-			//System.out.println("s="+source+" d="+destination+" t"+type);
-			List<Book> obj=userServiceImpl.cancelBooking(booking_id);
-			//System.out.println("list="+obj);
-			return obj;
-	}
 	
     
     
